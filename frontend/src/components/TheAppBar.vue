@@ -1,0 +1,24 @@
+<template>
+  <v-app-bar color="primary">
+    <template v-slot:prepend>
+      <v-app-bar-nav-icon @click="toggleSidebar"></v-app-bar-nav-icon>
+    </template>
+    <v-app-bar-title>Wunderlist</v-app-bar-title>
+    <!-- <template v-if="authStore.isAuthenticated"> -->
+    <v-btn
+      icon
+      @click="authStore.logout"
+    >
+      <v-icon>mdi-logout</v-icon>
+    </v-btn>
+    <!-- </template> -->
+  </v-app-bar>
+</template>
+
+<script setup lang="ts">
+  import { useLeftSidebar } from '@/composables/useLeftSidebar';
+  import { useAuthStore } from '@/stores/auth';
+
+  const authStore = useAuthStore();
+  const { toggleSidebar } = useLeftSidebar();
+</script>

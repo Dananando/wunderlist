@@ -1,23 +1,38 @@
+import LoginView from '@/views/authentication/LoginView.vue';
+import RegisterView from '@/views/authentication/RegisterView.vue';
+import TodoView from '@/views/Todos/TodoView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'todo',
+      component: TodoView,
+      meta: { requiresAuth: true },
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
     },
   ],
 });
+
+// router.beforeEach((to, _from, next) => {
+//   const authStore = useAuthStore();
+
+//   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+//     next('/login');
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;
