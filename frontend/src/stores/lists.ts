@@ -1,3 +1,5 @@
+// Liste from API
+
 import type { List } from '@/services/lists';
 import { listsService } from '@/services/lists';
 import { defineStore } from 'pinia';
