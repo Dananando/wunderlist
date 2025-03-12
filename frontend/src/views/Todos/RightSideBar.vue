@@ -22,10 +22,25 @@
           readonly
         ></v-text-field>
         <v-textarea
-          :model-value="selectedTask?.description ?? ''"
-          label="Description"
+          :model-value="selectedTask?.longDescription ?? ''"
+          label="Long Description"
           readonly
-        ></v-textarea>
+        />
+        <v-textarea
+          :model-value="selectedTask?.shortDescription ?? ''"
+          label="Short Description"
+          readonly
+        />
+        <v-text-field
+          :model-value="selectedTask?.dueDate ?? ''"
+          label="Due Date"
+          readonly
+        />
+        <v-text-field
+          :model-value="selectedTask?.createdAt ?? ''"
+          label="Created At"
+          readonly
+        />
       </v-card-text>
     </v-card>
   </v-navigation-drawer>

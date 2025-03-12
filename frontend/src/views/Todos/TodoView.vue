@@ -50,7 +50,7 @@
         icon="mdi-plus"
         size="large"
         class="floating-btn"
-        @click="showNewTodoDialog = true"
+        @click="showNewTaskDialog = true"
       ></v-btn>
     </template>
     <template v-else>
@@ -72,7 +72,7 @@
   <RightSideBar />
 
   <v-dialog
-    v-model="showNewTodoDialog"
+    v-model="showNewTaskDialog"
     max-width="500px"
   >
     <v-card>
@@ -81,17 +81,25 @@
         <v-text-field
           v-model="newTask.title"
           label="Title"
-        ></v-text-field>
+        />
         <v-textarea
-          v-model="newTask.description"
+          v-model="newTask.shortDescription"
           label="Description"
-        ></v-textarea>
+        />
+        <v-textarea
+          v-model="newTask.longDescription"
+          label="Long Description"
+        />
+        <v-text-field
+          v-model="newTask.dueDate"
+          label="Due Date"
+        />
       </v-card-text>
       <v-card-actions>
         <v-btn
           color="primary"
           text
-          @click="showNewTodoDialog = false"
+          @click="showNewTaskDialog = false"
           >Cancel</v-btn
         >
         <v-btn
@@ -120,10 +128,15 @@
 
   const rightDrawer = ref(false);
   const activeTab = ref('ongoing');
-  const showNewTodoDialog = ref(false);
-  const newTask = ref({
+  const showNewTaskDialog = ref(false);
+  const newTask = ref<Omit<Task, 'id'>>({
     title: '',
-    description: '',
+    shortDescription: '',
+    longDescription: '',
+    dueDate: '',
+    completed: false,
+    listId: '',
+    createdAt: '',
   });
 
   // Watch for selected task to open right drawer
@@ -146,12 +159,24 @@
     if (newTask.value.title && listStore.selectedList) {
       taskStore.addTask({
         title: newTask.value.title,
-        description: newTask.value.description,
+        shortDescription: newTask.value.shortDescription,
+        longDescription: newTask.value.longDescription,
+        dueDate: newTask.value.dueDate,
         completed: false,
         listId: listStore.selectedList,
+        createdAt: new Date().toLocaleDateString('fr-FR'),
       });
-      newTask.value = { title: '', description: '' };
-      showNewTodoDialog.value = false;
+
+      newTask.value = {
+        title: '',
+        shortDescription: '',
+        longDescription: '',
+        dueDate: '',
+        completed: false,
+        listId: '',
+        createdAt: '',
+      };
+      showNewTaskDialog.value = false;
     }
   }
 

@@ -4,9 +4,12 @@ import { ref } from 'vue';
 export interface Task {
   id: string;
   title: string;
-  description: string;
+  shortDescription: string;
+  longDescription: string;
+  dueDate: string;
   completed: boolean;
   listId: string;
+  createdAt: string;
 }
 
 export const useTaskStore = defineStore('task', () => {
@@ -14,44 +17,62 @@ export const useTaskStore = defineStore('task', () => {
     {
       id: '1',
       title: 'Buy groceries',
-      description: 'Get milk, eggs, and bread',
+      shortDescription: 'Get milk, eggs, and bread',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: false,
       listId: '1',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
     {
       id: '2',
       title: 'Do laundry',
-      description: 'Wash and fold clothes',
+      shortDescription: 'Wash and fold clothes',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: true,
       listId: '1',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
     {
       id: '3',
       title: 'Pay bills',
-      description: 'Pay electricity and water bills',
+      shortDescription: 'Pay electricity and water bills',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: false,
       listId: '2',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
     {
       id: '4',
       title: 'Blabla',
-      description: 'Get milk, eggs, and bread',
+      shortDescription: 'Get milk, eggs, and bread',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: false,
       listId: '1',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
     {
       id: '5',
       title: 'Toto',
-      description: 'Get milk, eggs, and bread',
+      shortDescription: 'Get milk, eggs, and bread',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: false,
       listId: '1',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
     {
       id: '6',
       title: 'Tata',
-      description: 'Get milk, eggs, and bread',
+      shortDescription: 'Get milk, eggs, and bread',
+      longDescription: 'Toto',
+      dueDate: new Date().toLocaleDateString('fr-FR'),
       completed: false,
       listId: '1',
+      createdAt: new Date().toLocaleDateString('fr-FR'),
     },
   ]);
   const selectedTask = ref<Task | null>(null);
@@ -59,7 +80,7 @@ export const useTaskStore = defineStore('task', () => {
   const addTask = (task: Omit<Task, 'id'>) => {
     tasks.value.push({
       ...task,
-      id: Math.random().toString(36).substring(7),
+      id: (tasks.value.length + 1).toString(),
     });
   };
 
