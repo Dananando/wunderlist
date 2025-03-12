@@ -3,7 +3,7 @@
 
   <!-- Main Content -->
   <v-container fluid>
-    <template v-if="listStore.selectedList">
+    <template v-if="selectedListId">
       <v-tabs v-model="activeTab">
         <v-tab value="ongoing">Ongoing</v-tab>
         <v-tab value="done">Done</v-tab>
@@ -119,6 +119,7 @@
   import { useRightSidebar } from '@/composables/useRightSideBar';
   import { useListStore } from '@/stores/list';
   import { useTaskStore, type Task } from '@/stores/task';
+  import { storeToRefs } from 'pinia';
   import { computed, ref, watch } from 'vue';
   import LeftSideBar from './LeftSideBar.vue';
   import RightSideBar from './RightSideBar.vue';
@@ -126,6 +127,9 @@
   const listStore = useListStore();
   const taskStore = useTaskStore();
   const { toggleRightSidebar } = useRightSidebar();
+
+  const { selectedListId } = storeToRefs(listStore);
+  const { tasks, selectedTask } = storeToRefs(taskStore);
 
   const rightDrawer = ref(false);
   const activeTab = ref('ongoing');
@@ -142,29 +146,29 @@
 
   // Watch for selected task to open right drawer
   watch(
-    () => taskStore.selectedTask,
+    () => selectedTask.value,
     (newValue) => {
       rightDrawer.value = !!newValue;
     },
   );
 
   const ongoingTasks = computed(() =>
-    taskStore.tasks.filter((task) => task.listId === listStore.selectedList && !task.completed),
+    tasks.value.filter((task) => task.listId === selectedListId.value && !task.completed),
   );
 
   const completedTasks = computed(() =>
-    taskStore.tasks.filter((task) => task.listId === listStore.selectedList && task.completed),
+    tasks.value.filter((task) => task.listId === selectedListId.value && task.completed),
   );
 
   function createNewTask() {
-    if (newTask.value.title && listStore.selectedList) {
+    if (newTask.value.title && selectedListId.value) {
       taskStore.addTask({
         title: newTask.value.title,
         shortDescription: newTask.value.shortDescription,
         longDescription: newTask.value.longDescription,
         dueDate: newTask.value.dueDate,
         completed: false,
-        listId: listStore.selectedList,
+        listId: selectedListId.value,
         createdAt: new Date().toLocaleDateString('fr-FR'),
       });
 

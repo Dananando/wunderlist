@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -26,10 +27,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-  const authStore = useAuthStore();
+  const { isAuthenticated } = storeToRefs(useAuthStore());
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!authStore.isAuthenticated) {
+    if (!isAuthenticated.value) {
       next({
         path: '/login',
         query: { redirect: to.fullPath },
@@ -38,7 +39,7 @@ router.beforeEach((to, _from, next) => {
       next();
     }
   } else if (to.matched.some((record) => record.meta.guest)) {
-    if (authStore.isAuthenticated) {
+    if (isAuthenticated.value) {
       next('/');
     } else {
       next();

@@ -17,7 +17,7 @@ export const useListStore = defineStore('list', () => {
       name: 'List 2',
     },
   ]);
-  const selectedList = ref<string | null>(null);
+  const selectedListId = ref<string | null>(null);
 
   function addList(name: string) {
     lists.value.push({
@@ -30,19 +30,19 @@ export const useListStore = defineStore('list', () => {
     const index = lists.value.findIndex((list) => list.id === id);
     if (index !== -1) {
       lists.value.splice(index, 1);
-      if (selectedList.value === id) {
-        selectedList.value = null;
+      if (selectedListId.value === id) {
+        selectedListId.value = null;
       }
     }
   }
 
   function selectList(id: string | null) {
-    selectedList.value = id;
+    selectedListId.value = id;
   }
 
   return {
     lists,
-    selectedList,
+    selectedListId,
     addList,
     deleteList,
     selectList,

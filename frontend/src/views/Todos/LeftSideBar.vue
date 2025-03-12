@@ -10,12 +10,12 @@
     <v-list>
       <v-divider></v-divider>
       <v-list-item
-        v-for="list in listStore.lists"
+        v-for="list in lists"
         :key="list.id"
         :value="list.id"
         :title="list.name"
         @click="listStore.selectList(list.id)"
-        :active="listStore.selectedList === list.id"
+        :active="selectedListId === list.id"
       >
       </v-list-item>
     </v-list>
@@ -67,11 +67,14 @@
 <script setup lang="ts">
   import { useLeftSidebar } from '@/composables/useLeftSidebar';
   import { useListStore } from '@/stores/list';
+  import { storeToRefs } from 'pinia';
   import { ref } from 'vue';
 
   const { isLeftSidebarOpen } = useLeftSidebar();
 
   const listStore = useListStore();
+
+  const { lists, selectedListId } = storeToRefs(listStore);
 
   const showNewListDialog = ref(false);
 
