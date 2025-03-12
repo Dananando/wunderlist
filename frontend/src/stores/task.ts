@@ -32,6 +32,27 @@ export const useTaskStore = defineStore('task', () => {
       completed: false,
       listId: '2',
     },
+    {
+      id: '4',
+      title: 'Blabla',
+      description: 'Get milk, eggs, and bread',
+      completed: false,
+      listId: '1',
+    },
+    {
+      id: '5',
+      title: 'Toto',
+      description: 'Get milk, eggs, and bread',
+      completed: false,
+      listId: '1',
+    },
+    {
+      id: '6',
+      title: 'Tata',
+      description: 'Get milk, eggs, and bread',
+      completed: false,
+      listId: '1',
+    },
   ]);
   const selectedTask = ref<Task | null>(null);
 

@@ -1,6 +1,6 @@
 import LoginView from '@/views/authentication/LoginView.vue';
 import RegisterView from '@/views/authentication/RegisterView.vue';
-import TodoView from '@/views/TodoView.vue';
+import TodoView from '@/views/Todos/TodoView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
