@@ -15,7 +15,7 @@ export class ListsService {
       name,
       user: { id: userId },
     });
-    return this.listsRepository.save(list);
+    return list;
   }
 
   async findOne(id: number, userId: number): Promise<List> {

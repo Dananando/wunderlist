@@ -12,14 +12,14 @@ export class TasksService {
 
   async create(
     listId: number,
-    data: {
+    taskData: {
       shortDescription: string;
       longDescription?: string;
       dueDate?: Date;
     },
   ): Promise<Task> {
     const task = this.tasksRepository.create({
-      ...data,
+      ...taskData,
       list: { id: listId },
     });
     return this.tasksRepository.save(task);
@@ -44,14 +44,14 @@ export class TasksService {
   async update(
     id: number,
     listId: number,
-    data: {
+    taskData: {
       shortDescription?: string;
       longDescription?: string;
       dueDate?: Date;
     },
   ): Promise<Task> {
     const task = await this.findOne(id, listId);
-    Object.assign(task, data);
+    Object.assign(task, taskData);
     return this.tasksRepository.save(task);
   }
 }
