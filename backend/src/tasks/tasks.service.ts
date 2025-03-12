@@ -38,7 +38,6 @@ export class TasksService {
   async findAllByList(listId: number): Promise<Task[]> {
     return this.tasksRepository.find({
       where: { list: { id: listId } },
-      order: { createdAt: 'DESC' },
     });
   }
 
