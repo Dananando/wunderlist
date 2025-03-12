@@ -1,90 +1,50 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth';
-import { RouterView, useRouter } from 'vue-router';
-
-const authStore = useAuthStore();
-const router = useRouter();
-
-function handleLogout() {
-  authStore.logout();
-  router.push('/login');
-}
+  import TheAppBar from './components/TheAppBar.vue';
 </script>
 
 <template>
   <v-app>
-    <v-app-bar>
-      <v-app-bar-title>Wunderlist</v-app-bar-title>
-      <v-spacer></v-spacer>
-      <template v-if="authStore.isAuthenticated">
-        <v-btn @click="handleLogout">Logout</v-btn>
-      </template>
-    </v-app-bar>
+    <TheAppBar />
 
-    <router-view></router-view>
+    <v-main>
+      <router-view></router-view>
+    </v-main>
   </v-app>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
   header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    line-height: 1.5;
+    max-height: 100vh;
   }
 
   .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    display: block;
+    margin: 0 auto 2rem;
   }
 
   nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 2rem;
   }
-}
+
+  nav a.router-link-exact-active {
+    color: var(--color-text);
+  }
+
+  nav a.router-link-exact-active:hover {
+    background-color: transparent;
+  }
+
+  nav a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  nav a:first-of-type {
+    border: 0;
+  }
 </style>
