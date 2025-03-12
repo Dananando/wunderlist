@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
-import { List } from 'src/list/list.entity';
-import { Task } from 'src/task/task.entity';
+import { List } from 'src/lists/list.entity';
+import { Task } from 'src/tasks/task.entity';
 import { DataSource } from 'typeorm';
 
 config();

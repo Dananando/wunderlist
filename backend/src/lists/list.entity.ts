@@ -1,4 +1,4 @@
-import { Task } from 'src/task/task.entity';
+import { Task } from 'src/tasks/task.entity';
 import {
   Column,
   Entity,
@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class List {

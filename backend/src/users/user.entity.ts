@@ -1,4 +1,4 @@
-import { List } from 'src/list/list.entity';
+import { List } from 'src/lists/list.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
