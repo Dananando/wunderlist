@@ -12,6 +12,7 @@
       <v-window
         v-model="activeTab"
         class="mt-4"
+        theme="primary"
       >
         <v-window-item value="ongoing">
           <v-list>
