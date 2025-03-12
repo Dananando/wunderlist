@@ -1,6 +1,4 @@
-import LoginView from '@/views/authentication/LoginView.vue';
-import RegisterView from '@/views/authentication/RegisterView.vue';
-import TodoView from '@/views/Todos/TodoView.vue';
+import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -8,31 +6,46 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'todo',
-      component: TodoView,
+      name: 'home',
+      component: () => import('@/views/Todos/TodoView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+      component: () => import('@/views/authentication/LoginView.vue'),
+      meta: { guest: true },
     },
     {
       path: '/register',
       name: 'register',
-      component: RegisterView,
+      component: () => import('@/views/authentication/RegisterView.vue'),
+      meta: { guest: true },
     },
   ],
 });
 
-// router.beforeEach((to, _from, next) => {
-//   const authStore = useAuthStore();
+router.beforeEach((to, _from, next) => {
+  const authStore = useAuthStore();
 
-//   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!authStore.isAuthenticated) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.guest)) {
+    if (authStore.isAuthenticated) {
+      next('/');
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;

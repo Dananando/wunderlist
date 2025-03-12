@@ -1,46 +1,46 @@
+import { api } from '@/services/api';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-interface User {
-  id: string;
+interface LoginCredentials {
   email: string;
-  name: string;
+  password: string;
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null);
-  const isAuthenticated = ref(false);
+  const token = ref<string | null>(localStorage.getItem('token'));
+  const router = useRouter();
 
-  function login(email: string, password: string) {
-    // Mock login for now
-    user.value = {
-      id: '1',
-      email,
-      name: email.split('@')[0],
-    };
-    isAuthenticated.value = true;
-  }
+  const isAuthenticated = ref<boolean>(!!token.value);
 
-  function register(email: string, password: string, name: string) {
-    // Mock register for now
-    user.value = {
-      id: '1',
-      email,
-      name,
-    };
-    isAuthenticated.value = true;
+  async function login(credentials: LoginCredentials) {
+    try {
+      const response = await api.post('/auth/login', credentials);
+      const { access_token } = response.data;
+
+      token.value = access_token;
+      localStorage.setItem('token', access_token);
+      isAuthenticated.value = true;
+
+      router.push('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
   }
 
   function logout() {
-    user.value = null;
+    token.value = null;
+    localStorage.removeItem('token');
     isAuthenticated.value = false;
+    router.push('/login');
   }
 
   return {
-    user,
+    token,
     isAuthenticated,
     login,
-    register,
     logout,
   };
 });
