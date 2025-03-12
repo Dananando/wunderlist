@@ -1,3 +1,5 @@
+// Tasks from API
+
 import { tasksService, type Task } from '@/services/tasks';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
