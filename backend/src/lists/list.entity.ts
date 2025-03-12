@@ -1,4 +1,3 @@
-import { Task } from 'src/tasks/task.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Task } from '../tasks/task.entity';
 import { User } from '../users/user.entity';
 
 @Entity()
@@ -16,7 +16,10 @@ export class List {
   @Column()
   name: string;
 
-  @ManyToOne(() => User, (user) => user.lists)
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User)
   user: User;
 
   @OneToMany(() => Task, (task) => task.list)

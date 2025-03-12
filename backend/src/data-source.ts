@@ -1,5 +1,8 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
+import { List } from './lists/list.entity';
+import { Task } from './tasks/task.entity';
+import { User } from './users/user.entity';
 
 config(); // Load environment variables
 
@@ -12,7 +15,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || 'wunderlist',
   synchronize: process.env.NODE_ENV !== 'production', // Auto-sync database in development
   logging: process.env.NODE_ENV !== 'production',
-  entities: ['src/entities/**/*.entity.ts'],
+  entities: [User, List, Task],
   migrations: ['src/migrations/**/*.ts'],
   subscribers: ['src/subscribers/**/*.ts'],
 });

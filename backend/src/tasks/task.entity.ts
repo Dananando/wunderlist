@@ -1,5 +1,5 @@
-import { List } from 'src/lists/list.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { List } from '../lists/list.entity';
 
 @Entity()
 export class Task {
@@ -12,11 +12,11 @@ export class Task {
   @Column({ nullable: true })
   longDescription: string;
 
-  @Column()
+  @Column({ nullable: true })
   dueDate: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  @Column()
+  listId: number;
 
   @ManyToOne(() => List, (list) => list.tasks)
   list: List;
