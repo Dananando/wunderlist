@@ -1,7 +1,6 @@
 <template>
   <v-list-item
     v-bind="$attrs"
-    @click="$emit('click-on-item', $event)"
     class="py-2"
   >
     <template v-slot:prepend>
@@ -25,7 +24,6 @@
   }>();
 
   defineEmits<{
-    (e: 'click-on-item', event: Event): void;
     (e: 'click-on-icon', event: Event): void;
   }>();
 </script>

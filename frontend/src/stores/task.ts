@@ -56,14 +56,14 @@ export const useTaskStore = defineStore('task', () => {
   ]);
   const selectedTask = ref<Task | null>(null);
 
-  function addTask(task: Omit<Task, 'id'>) {
+  const addTask = (task: Omit<Task, 'id'>) => {
     tasks.value.push({
       ...task,
       id: Math.random().toString(36).substring(7),
     });
-  }
+  };
 
-  function deleteTask(id: string) {
+  const deleteTask = (id: string) => {
     const index = tasks.value.findIndex((task) => task.id === id);
     if (index !== -1) {
       tasks.value.splice(index, 1);
@@ -71,25 +71,25 @@ export const useTaskStore = defineStore('task', () => {
         selectedTask.value = null;
       }
     }
-  }
+  };
 
-  function toggleTaskStatus(id: string) {
+  const toggleTaskStatus = (id: string) => {
     const task = tasks.value.find((task) => task.id === id);
     if (task) {
       task.completed = !task.completed;
     }
-  }
+  };
 
-  function selectTask(task: Task | null) {
+  const selectTask = (task: Task | null) => {
     selectedTask.value = task;
-  }
+  };
 
-  function deleteTasksByListId(listId: string) {
+  const deleteTasksByListId = (listId: string) => {
     tasks.value = tasks.value.filter((task) => task.listId !== listId);
     if (selectedTask.value?.listId === listId) {
       selectedTask.value = null;
     }
-  }
+  };
 
   return {
     tasks,

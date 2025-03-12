@@ -19,7 +19,7 @@
               v-for="task in ongoingTasks"
               :key="task.id"
               :value="task.id"
-              @click-on-item="taskStore.selectTask(task)"
+              @click="selectTask(task)"
               @click-on-icon="taskStore.toggleTaskStatus(task.id)"
               icon="mdi-checkbox-blank-outline"
               :model-value="task.completed"
@@ -34,7 +34,7 @@
               v-for="task in completedTasks"
               :key="task.id"
               :value="task.id"
-              @click-on-item="taskStore.selectTask(task)"
+              @click="selectTask(task)"
               @click-on-icon="taskStore.toggleTaskStatus(task.id)"
               icon="mdi-checkbox-marked"
               :model-value="task.completed"
@@ -107,18 +107,20 @@
 
 <script setup lang="ts">
   import BaseItem from '@/components/BaseItem.vue';
+  import { useRightSidebar } from '@/composables/useRightSideBar';
   import { useListStore } from '@/stores/list';
-  import { useTaskStore } from '@/stores/task';
+  import { useTaskStore, type Task } from '@/stores/task';
   import { computed, ref, watch } from 'vue';
   import LeftSideBar from './LeftSideBar.vue';
+  import RightSideBar from './RightSideBar.vue';
 
   const listStore = useListStore();
   const taskStore = useTaskStore();
+  const { toggleRightSidebar } = useRightSidebar();
 
   const rightDrawer = ref(false);
   const activeTab = ref('ongoing');
   const showNewTodoDialog = ref(false);
-  const showDeleteDialog = ref(false);
   const newTask = ref({
     title: '',
     description: '',
@@ -153,12 +155,10 @@
     }
   }
 
-  function deleteTask() {
-    if (taskStore.selectedTask) {
-      taskStore.deleteTask(taskStore.selectedTask.id);
-      showDeleteDialog.value = false;
-    }
-  }
+  const selectTask = (task: Task) => {
+    toggleRightSidebar();
+    taskStore.selectTask(task);
+  };
 </script>
 
 <style scoped>

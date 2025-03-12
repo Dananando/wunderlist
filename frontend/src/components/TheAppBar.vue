@@ -1,7 +1,7 @@
 <template>
   <v-app-bar color="primary">
     <template v-slot:prepend>
-      <v-app-bar-nav-icon @click="toggleSidebar"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="toggleLeftSidebar"></v-app-bar-nav-icon>
     </template>
     <v-app-bar-title>Wunderlist</v-app-bar-title>
     <!-- <template v-if="authStore.isAuthenticated"> -->
@@ -11,7 +11,6 @@
     >
       <v-icon>mdi-logout</v-icon>
     </v-btn>
-    <!-- </template> -->
   </v-app-bar>
 </template>
 
@@ -20,5 +19,5 @@
   import { useAuthStore } from '@/stores/auth';
 
   const authStore = useAuthStore();
-  const { toggleSidebar } = useLeftSidebar();
+  const { toggleLeftSidebar } = useLeftSidebar();
 </script>

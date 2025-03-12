@@ -77,7 +77,7 @@
 
   const newListName = ref('');
 
-  function createNewList() {
+  const createNewList = (): void => {
     listStore.addList(newListName.value);
-  }
+  };
 </script>
