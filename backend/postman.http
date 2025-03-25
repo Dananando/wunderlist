@@ -1,0 +1,13 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "batman@libheros.com",
+    "password": "password"
+}
+
+###
+
+GET http://localhost:3000/lists
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoic3RlcGhhbmVAbWFpbC5jb20iLCJpYXQiOjE3NDI5MDc0OTQsImV4cCI6MTc0Mjk5Mzg5NH0.AmcayeogcTNITO5_cOm8_PSjdhIGs2fiQ3tOFiwfqVI

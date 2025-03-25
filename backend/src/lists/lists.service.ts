@@ -18,6 +18,15 @@ export class ListsService {
     return list;
   }
 
+  async findAll(userId: number): Promise<List[]> {
+    const lists = await this.listsRepository.find({
+      where: { userId },
+      relations: ['tasks'],
+    });
+
+    return lists;
+  }
+
   async findOne(id: number, userId: number): Promise<List> {
     const list = await this.listsRepository.findOne({
       where: { id, user: { id: userId } },

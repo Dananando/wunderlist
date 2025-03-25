@@ -5,8 +5,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from '../common/users/user.entity';
 import { Task } from '../tasks/task.entity';
-import { User } from '../users/user.entity';
 
 @Entity()
 export class List {

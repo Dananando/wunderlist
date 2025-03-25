@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from 'src/common/auth/auth.guard';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 

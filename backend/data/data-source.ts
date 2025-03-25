@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
-import { List } from './lists/list.entity';
-import { Task } from './tasks/task.entity';
-import { User } from './users/user.entity';
+import { User } from '../src/common/users/user.entity';
+import { List } from '../src/lists/list.entity';
+import { Task } from '../src/tasks/task.entity';
 
 config(); // Load environment variables
 

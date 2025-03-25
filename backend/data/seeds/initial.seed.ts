@@ -1,8 +1,8 @@
+import { PasswordService } from 'src/common/auth/password.service';
+import { User } from 'src/common/users/user.entity';
+import { List } from 'src/lists/list.entity';
+import { Task } from 'src/tasks/task.entity';
 import { DataSource } from 'typeorm';
-import { PasswordService } from '../../auth/password.service';
-import { List } from '../../lists/list.entity';
-import { Task } from '../../tasks/task.entity';
-import { User } from '../../users/user.entity';
 
 export async function seed(dataSource: DataSource) {
   const userRepository = dataSource.getRepository(User);
@@ -82,7 +82,6 @@ export async function seed(dataSource: DataSource) {
       listId: lists[1].id,
     },
 
-    // Shopping tasks
     {
       shortDescription: 'Buy groceries',
       longDescription: 'Get weekly groceries from the supermarket',

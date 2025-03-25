@@ -1,5 +1,5 @@
 import { AppDataSource } from '../data-source';
-import { seed } from './seeds/initial.seed';
+import { seed } from './initial.seed';
 
 AppDataSource.initialize()
   .then(async () => {

@@ -9,7 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from 'src/common/auth/auth.guard';
 import { List } from './list.entity';
 import { ListsService } from './lists.service';
 
@@ -21,6 +21,11 @@ export class ListsController {
   @Post()
   create(@Request() req, @Body('name') name: string): Promise<List> {
     return this.listsService.create(req.user.sub, name);
+  }
+
+  @Get()
+  findAll(@Request() req): Promise<List[]> {
+    return this.listsService.findAll(req.user.sub);
   }
 
   @Get(':id')
