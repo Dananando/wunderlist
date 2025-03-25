@@ -12,15 +12,15 @@ To run:
 2. Run `npm i`
 3. Check the `.env` config
 4. Run the migrations `npm run typeorm migration:run -- -d src/data-source.ts`
-5. Run the seeding script `npm run script`
-6. Insert a user into the table `user`
-7. Run `npm run start:dev`
+5. Run the seeding script `npm run seed`
+6. Run `npm run start:dev`
 
 # Frontend
 
 Built using VueJS, Vuetify
 
 1. Run `cd frontend && npm i && npm run dev`
+2. You can login using the username "batman@libheros.com" and the password "password"
 
 # Caveat
 

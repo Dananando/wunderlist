@@ -5,22 +5,22 @@ import { ref } from 'vue';
 
 export const useListsStore = defineStore('lists', () => {
   const lists = ref<List[]>([]);
-  const loading = ref(false);
+  const listLoading = ref(false);
   const error = ref<string | null>(null);
 
   async function fetchLists() {
-    loading.value = true;
+    listLoading.value = true;
     try {
       lists.value = await listsService.getLists();
     } catch (err) {
       throw err;
     } finally {
-      loading.value = false;
+      listLoading.value = false;
     }
   }
 
   async function createList(name: string) {
-    loading.value = true;
+    listLoading.value = true;
     try {
       const newList = await listsService.createList(name);
       lists.value.push(newList);
@@ -28,12 +28,12 @@ export const useListsStore = defineStore('lists', () => {
     } catch (err) {
       throw err;
     } finally {
-      loading.value = false;
+      listLoading.value = false;
     }
   }
 
   async function updateList(id: number, name: string) {
-    loading.value = true;
+    listLoading.value = true;
     try {
       const updatedList = await listsService.updateList(id, name);
       const index = lists.value.findIndex((list) => list.id === id);
@@ -44,25 +44,25 @@ export const useListsStore = defineStore('lists', () => {
     } catch (err) {
       throw err;
     } finally {
-      loading.value = false;
+      listLoading.value = false;
     }
   }
 
   async function deleteList(id: number) {
-    loading.value = true;
+    listLoading.value = true;
     try {
       await listsService.deleteList(id);
       lists.value = lists.value.filter((list) => list.id !== id);
     } catch (err) {
       throw err;
     } finally {
-      loading.value = false;
+      listLoading.value = false;
     }
   }
 
   return {
     lists,
-    loading,
+    loading: listLoading,
     error,
     fetchLists,
     createList,
