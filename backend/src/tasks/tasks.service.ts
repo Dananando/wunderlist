@@ -37,7 +37,7 @@ export class TasksService {
 
   async findAllByList(listId: number): Promise<Task[]> {
     return this.tasksRepository.find({
-      where: { list: { id: listId } },
+      where: { listId },
     });
   }
 
@@ -53,5 +53,9 @@ export class TasksService {
     const task = await this.findOne(id, listId);
     Object.assign(task, taskData);
     return this.tasksRepository.save(task);
+  }
+
+  async remove(id: number, listId: number): Promise<void> {
+    await this.tasksRepository.delete({ id });
   }
 }

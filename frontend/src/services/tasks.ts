@@ -6,20 +6,26 @@ export interface Task {
   longDescription?: string;
   dueDate?: Date;
   listId: number;
+  completed: boolean;
 }
 
 export const tasksService = {
-  async createTask(task: Omit<Task, 'id'>): Promise<Task> {
-    const response = await api.post<Task>('/tasks', task);
+  async getTasks(listId: number): Promise<Task[]> {
+    const response = await api.get<Task[]>(`/lists/${listId}/tasks`);
     return response.data;
   },
 
-  async updateTask(id: number, task: Omit<Task, 'id'>): Promise<Task> {
-    const response = await api.patch<Task>(`/tasks/${id}`, task);
+  async createTask(listId: number, task: Partial<Task>): Promise<Task> {
+    const response = await api.post<Task>(`/lists/${listId}/tasks`, task);
     return response.data;
   },
 
-  async deleteTask(id: number): Promise<void> {
-    await api.delete(`/tasks/${id}`);
+  async updateTask(id: number, listId: number, task: Partial<Task>): Promise<Task> {
+    const response = await api.patch<Task>(`/lists/${listId}/tasks/${id}`, task);
+    return response.data;
+  },
+
+  async deleteTask(id: number, listId: number): Promise<void> {
+    await api.delete(`/lists/${listId}/tasks/${id}`);
   },
 };

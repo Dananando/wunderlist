@@ -4,11 +4,14 @@ import { ref } from 'vue';
 
 export const useTasksStore = defineStore('tasks', () => {
   const loading = ref(false);
+  const tasks = ref<Task[]>([]);
+  const selectedTask = ref<Partial<Task> | null>(null);
 
-  async function createTask(task: Omit<Task, 'id'>) {
+  async function fetchTasks(listId: number) {
     loading.value = true;
+
     try {
-      return await tasksService.createTask(task);
+      tasks.value = await tasksService.getTasks(listId);
     } catch (err) {
       throw err;
     } finally {
@@ -16,10 +19,11 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
-  async function updateTask(id: number, task: Omit<Task, 'id'>) {
+  async function createTask(listId: number, task: Partial<Task>) {
     loading.value = true;
     try {
-      return await tasksService.updateTask(id, task);
+      await tasksService.createTask(listId, task);
+      await fetchTasks(listId);
     } catch (err) {
       throw err;
     } finally {
@@ -27,10 +31,35 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
-  async function deleteTask(id: number) {
+  async function updateTask(id: number, listId: number, task: Partial<Task>) {
     loading.value = true;
     try {
-      await tasksService.deleteTask(id);
+      await tasksService.updateTask(id, listId, task);
+      await fetchTasks(listId);
+    } catch (err) {
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function toggleTaskCompleted(id: number, listId: number) {
+    loading.value = true;
+    try {
+      await tasksService.updateTask(id, listId, { completed: !selectedTask.value?.completed });
+      await fetchTasks(listId);
+    } catch (err) {
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function deleteTask(id: number, listId: number) {
+    loading.value = true;
+    try {
+      await tasksService.deleteTask(id, listId);
+      await fetchTasks(listId);
     } catch (err) {
       throw err;
     } finally {
@@ -39,9 +68,13 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 
   return {
+    selectedTask,
+    toggleTaskCompleted,
     loading,
+    tasks,
     createTask,
     updateTask,
     deleteTask,
+    fetchTasks,
   };
 });

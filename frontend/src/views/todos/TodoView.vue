@@ -20,11 +20,11 @@
               v-for="task in ongoingTasks"
               :key="task.id"
               :value="task.id"
-              @click="selectTask(task)"
-              @click-on-icon="taskStore.toggleTaskStatus(task.id)"
+              @click="selectTask(task.id)"
+              @click-on-icon="tasksStore.toggleTaskCompleted(task.id, selectedListId)"
               icon="mdi-checkbox-blank-outline"
               :model-value="task.completed"
-              :title="task.title"
+              :title="task.shortDescription"
             />
           </v-list>
         </v-window-item>
@@ -35,11 +35,11 @@
               v-for="task in completedTasks"
               :key="task.id"
               :value="task.id"
-              @click="selectTask(task)"
-              @click-on-icon="taskStore.toggleTaskStatus(task.id)"
+              @click="selectTask(task.id)"
+              @click-on-icon="tasksStore.toggleTaskCompleted(task.id, selectedListId)"
               icon="mdi-checkbox-marked"
               :model-value="task.completed"
-              :title="task.title"
+              :title="task.shortDescription"
               item-title-class="text-decoration-line-through"
             />
           </v-list>
@@ -79,10 +79,6 @@
     <v-card>
       <v-card-title>New Task</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="newTask.title"
-          label="Title"
-        />
         <v-textarea
           v-model="newTask.shortDescription"
           label="Description"
@@ -106,7 +102,6 @@
         <v-btn
           color="primary"
           @click="createNewTask"
-          :disabled="!newTask.title"
           >Create</v-btn
         >
       </v-card-actions>
@@ -117,31 +112,29 @@
 <script setup lang="ts">
   import BaseItem from '@/components/BaseItem.vue';
   import { useRightSidebar } from '@/composables/useRightSideBar';
-  import { useListStore } from '@/stores/list';
-  import { useTaskStore, type Task } from '@/stores/task';
+  import type { Task } from '@/services/tasks';
+  import { useListsStore } from '@/stores/lists';
+  import { useTasksStore } from '@/stores/tasks';
   import { storeToRefs } from 'pinia';
   import { computed, ref, watch } from 'vue';
   import LeftSideBar from './LeftSideBar.vue';
   import RightSideBar from './RightSideBar.vue';
 
-  const listStore = useListStore();
-  const taskStore = useTaskStore();
+  const listsStore = useListsStore();
+  const tasksStore = useTasksStore();
   const { toggleRightSidebar } = useRightSidebar();
 
-  const { selectedListId } = storeToRefs(listStore);
-  const { tasks, selectedTask } = storeToRefs(taskStore);
+  const { selectedListId } = storeToRefs(listsStore);
+  const { tasks, selectedTask } = storeToRefs(tasksStore);
 
   const rightDrawer = ref(false);
   const activeTab = ref('ongoing');
   const showNewTaskDialog = ref(false);
-  const newTask = ref<Omit<Task, 'id'>>({
-    title: '',
+  const newTask = ref<Partial<Task>>({
     shortDescription: '',
     longDescription: '',
-    dueDate: '',
     completed: false,
-    listId: '',
-    createdAt: '',
+    listId: selectedListId.value,
   });
 
   // Watch for selected task to open right drawer
@@ -153,41 +146,33 @@
   );
 
   const ongoingTasks = computed(() =>
-    tasks.value.filter((task) => task.listId === selectedListId.value && !task.completed),
+    tasks.value.filter((task) => task.listId === +selectedListId.value && !task.completed),
   );
 
   const completedTasks = computed(() =>
-    tasks.value.filter((task) => task.listId === selectedListId.value && task.completed),
+    tasks.value.filter((task) => task.listId === +selectedListId.value && task.completed),
   );
 
   function createNewTask() {
-    if (newTask.value.title && selectedListId.value) {
-      taskStore.addTask({
-        title: newTask.value.title,
-        shortDescription: newTask.value.shortDescription,
-        longDescription: newTask.value.longDescription,
-        dueDate: newTask.value.dueDate,
-        completed: false,
-        listId: selectedListId.value,
-        createdAt: new Date().toLocaleDateString('fr-FR'),
+    if (selectedListId.value) {
+      tasksStore.createTask(+selectedListId.value, {
+        ...newTask.value,
+        dueDate: newTask.value.dueDate ? new Date(newTask.value.dueDate) : new Date(),
       });
+      showNewTaskDialog.value = false;
 
       newTask.value = {
-        title: '',
         shortDescription: '',
         longDescription: '',
-        dueDate: '',
         completed: false,
-        listId: '',
-        createdAt: '',
+        listId: selectedListId.value,
       };
-      showNewTaskDialog.value = false;
     }
   }
 
-  const selectTask = (task: Task) => {
+  const selectTask = (id: number) => {
     toggleRightSidebar();
-    taskStore.selectTask(task);
+    selectedTask.value = tasks.value.filter((task) => task.id === id)[0];
   };
 </script>
 

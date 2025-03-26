@@ -1,10 +1,7 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Post,
   Request,
   UseGuards,
@@ -19,25 +16,12 @@ export class ListsController {
   constructor(private listsService: ListsService) {}
 
   @Post()
-  create(@Request() req, @Body('name') name: string): Promise<List> {
-    return this.listsService.create(req.user.sub, name);
+  async create(@Request() req, @Body('name') name: string): Promise<void> {
+    await this.listsService.create(req.user.sub, name);
   }
 
   @Get()
   findAll(@Request() req): Promise<List[]> {
     return this.listsService.findAll(req.user.sub);
-  }
-
-  @Get(':id')
-  findOne(
-    @Request() req,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<List> {
-    return this.listsService.findOne(id, req.user.sub);
-  }
-
-  @Delete(':id')
-  remove(@Request() req, @Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.listsService.delete(id, req.user.sub);
   }
 }

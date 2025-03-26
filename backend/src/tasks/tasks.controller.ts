@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -35,14 +36,6 @@ export class TasksController {
     return this.tasksService.findAllByList(listId);
   }
 
-  @Get(':id')
-  findOne(
-    @Param('listId', ParseIntPipe) listId: number,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Task> {
-    return this.tasksService.findOne(id, listId);
-  }
-
   @Patch(':id')
   update(
     @Param('listId', ParseIntPipe) listId: number,
@@ -55,5 +48,13 @@ export class TasksController {
     },
   ): Promise<Task> {
     return this.tasksService.update(id, listId, updateTaskDto);
+  }
+
+  @Delete(':id')
+  remove(
+    @Param('listId', ParseIntPipe) listId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {
+    return this.tasksService.remove(id, listId);
   }
 }

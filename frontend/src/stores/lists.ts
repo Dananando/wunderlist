@@ -7,6 +7,7 @@ export const useListsStore = defineStore('lists', () => {
   const lists = ref<List[]>([]);
   const listLoading = ref(false);
   const error = ref<string | null>(null);
+  const selectedListId = ref<number>(0);
 
   async function fetchLists() {
     listLoading.value = true;
@@ -22,37 +23,8 @@ export const useListsStore = defineStore('lists', () => {
   async function createList(name: string) {
     listLoading.value = true;
     try {
-      const newList = await listsService.createList(name);
-      lists.value.push(newList);
-      return newList;
-    } catch (err) {
-      throw err;
-    } finally {
-      listLoading.value = false;
-    }
-  }
-
-  async function updateList(id: number, name: string) {
-    listLoading.value = true;
-    try {
-      const updatedList = await listsService.updateList(id, name);
-      const index = lists.value.findIndex((list) => list.id === id);
-      if (index !== -1) {
-        lists.value[index] = updatedList;
-      }
-      return updatedList;
-    } catch (err) {
-      throw err;
-    } finally {
-      listLoading.value = false;
-    }
-  }
-
-  async function deleteList(id: number) {
-    listLoading.value = true;
-    try {
-      await listsService.deleteList(id);
-      lists.value = lists.value.filter((list) => list.id !== id);
+      await listsService.createList(name);
+      await fetchLists();
     } catch (err) {
       throw err;
     } finally {
@@ -63,10 +35,9 @@ export const useListsStore = defineStore('lists', () => {
   return {
     lists,
     loading: listLoading,
+    selectedListId,
     error,
     fetchLists,
     createList,
-    updateList,
-    deleteList,
   };
 });
