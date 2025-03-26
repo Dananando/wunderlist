@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('@/views/Todos/TodoView.vue'),
+      component: () => import('@/views/todos/TodoView.vue'),
       meta: { requiresAuth: true },
     },
     {

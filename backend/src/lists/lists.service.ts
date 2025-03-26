@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { List } from './list.entity';
@@ -10,32 +10,19 @@ export class ListsService {
     private listsRepository: Repository<List>,
   ) {}
 
-  async create(userId: number, name: string): Promise<List> {
-    const list = this.listsRepository.create({
+  async create(userId: number, name: string): Promise<void> {
+    await this.listsRepository.insert({
       name,
-      user: { id: userId },
+      userId,
     });
-    return list;
   }
 
-  async findOne(id: number, userId: number): Promise<List> {
-    const list = await this.listsRepository.findOne({
-      where: { id, user: { id: userId } },
+  async findAll(userId: number): Promise<List[]> {
+    const lists = await this.listsRepository.find({
+      where: { userId },
       relations: ['tasks'],
     });
-    if (!list) {
-      throw new NotFoundException(`List with ID ${id} not found`);
-    }
-    return list;
-  }
 
-  async delete(id: number, userId: number): Promise<void> {
-    const result = await this.listsRepository.delete({
-      id,
-      user: { id: userId },
-    });
-    if (result.affected === 0) {
-      throw new NotFoundException(`List with ID ${id} not found`);
-    }
+    return lists;
   }
 }

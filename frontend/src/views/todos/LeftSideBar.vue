@@ -14,7 +14,7 @@
         :key="list.id"
         :value="list.id"
         :title="list.name"
-        @click="listStore.selectList(list.id)"
+        @click="selectListId(list.id)"
         :active="selectedListId === list.id"
       >
       </v-list-item>
@@ -66,21 +66,30 @@
 
 <script setup lang="ts">
   import { useLeftSidebar } from '@/composables/useLeftSidebar';
-  import { useListStore } from '@/stores/list';
+  import { useListsStore } from '@/stores/lists';
+  import { useTasksStore } from '@/stores/tasks';
   import { storeToRefs } from 'pinia';
   import { ref } from 'vue';
 
   const { isLeftSidebarOpen } = useLeftSidebar();
+  const listsStore = useListsStore();
+  const tasksStore = useTasksStore();
 
-  const listStore = useListStore();
+  const { lists, selectedListId } = storeToRefs(listsStore);
 
-  const { lists, selectedListId } = storeToRefs(listStore);
+  listsStore.fetchLists();
 
   const showNewListDialog = ref(false);
-
   const newListName = ref('');
 
   const createNewList = (): void => {
-    listStore.addList(newListName.value);
+    listsStore.createList(newListName.value);
+    newListName.value = '';
+    showNewListDialog.value = false;
+  };
+
+  const selectListId = async (listId: number): Promise<void> => {
+    selectedListId.value = listId;
+    await tasksStore.fetchTasks(listId);
   };
 </script>

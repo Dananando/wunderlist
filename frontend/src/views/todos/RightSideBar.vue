@@ -16,11 +16,6 @@
         ></v-btn>
       </v-card-title>
       <v-card-text>
-        <v-text-field
-          :model-value="selectedTask?.title ?? ''"
-          label="Title"
-          readonly
-        ></v-text-field>
         <v-textarea
           :model-value="selectedTask?.longDescription ?? ''"
           label="Long Description"
@@ -32,13 +27,10 @@
           readonly
         />
         <v-text-field
-          :model-value="selectedTask?.dueDate ?? ''"
+          :model-value="
+            selectedTask?.dueDate ? new Date(selectedTask.dueDate).toLocaleDateString() : ''
+          "
           label="Due Date"
-          readonly
-        />
-        <v-text-field
-          :model-value="selectedTask?.createdAt ?? ''"
-          label="Created At"
           readonly
         />
       </v-card-text>
@@ -72,20 +64,20 @@
 
 <script setup lang="ts">
   import { useRightSidebar } from '@/composables/useRightSideBar';
-  import { useTaskStore } from '@/stores/task';
+  import { useTasksStore } from '@/stores/tasks';
   import { storeToRefs } from 'pinia';
   import { ref } from 'vue';
 
   const { isRightSidebarOpen } = useRightSidebar();
 
-  const taskStore = useTaskStore();
-  const { selectedTask } = storeToRefs(taskStore);
+  const tasksStore = useTasksStore();
+  const { selectedTask } = storeToRefs(tasksStore);
 
   const showDeleteDialog = ref(false);
 
   const deleteTask = (): void => {
-    if (selectedTask.value?.id) {
-      taskStore.deleteTask(selectedTask.value.id);
+    if (selectedTask.value?.id && selectedTask.value?.listId) {
+      tasksStore.deleteTask(selectedTask.value.id, selectedTask.value.listId);
       showDeleteDialog.value = false;
     }
   };

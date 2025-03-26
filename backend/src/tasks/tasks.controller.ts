@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -8,7 +9,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from 'src/common/auth/auth.guard';
+import { CreateTaskDto } from './dtos/create-task.dto';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
@@ -21,12 +24,9 @@ export class TasksController {
   create(
     @Param('listId', ParseIntPipe) listId: number,
     @Body()
-    createTaskDto: {
-      shortDescription: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
+    createTaskDto: CreateTaskDto,
   ): Promise<Task> {
+    console.log('createTaskDto', createTaskDto);
     return this.tasksService.create(listId, createTaskDto);
   }
 
@@ -35,25 +35,21 @@ export class TasksController {
     return this.tasksService.findAllByList(listId);
   }
 
-  @Get(':id')
-  findOne(
-    @Param('listId', ParseIntPipe) listId: number,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Task> {
-    return this.tasksService.findOne(id, listId);
-  }
-
   @Patch(':id')
   update(
     @Param('listId', ParseIntPipe) listId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body()
-    updateTaskDto: {
-      shortDescription?: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
+    updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     return this.tasksService.update(id, listId, updateTaskDto);
+  }
+
+  @Delete(':id')
+  remove(
+    @Param('listId', ParseIntPipe) listId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {
+    return this.tasksService.remove(id, listId);
   }
 }

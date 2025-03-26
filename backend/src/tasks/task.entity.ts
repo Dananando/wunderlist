@@ -18,6 +18,9 @@ export class Task {
   @Column()
   listId: number;
 
+  @Column({ default: false })
+  completed: boolean;
+
   @ManyToOne(() => List, (list) => list.tasks)
   list: List;
 }

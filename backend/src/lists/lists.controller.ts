@@ -1,16 +1,13 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
-import { List } from './list.entity';
+import { AuthGuard } from 'src/common/auth/auth.guard';
+import { CreateListDto } from './dtos/create-list.dto';
 import { ListsService } from './lists.service';
 
 @Controller('lists')
@@ -19,20 +16,16 @@ export class ListsController {
   constructor(private listsService: ListsService) {}
 
   @Post()
-  create(@Request() req, @Body('name') name: string): Promise<List> {
-    return this.listsService.create(req.user.sub, name);
-  }
-
-  @Get(':id')
-  findOne(
+  async create(
     @Request() req,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<List> {
-    return this.listsService.findOne(id, req.user.sub);
+    @Body() createListDto: CreateListDto,
+  ): Promise<void> {
+    const { name } = createListDto;
+    await this.listsService.create(req.user.sub, name);
   }
 
-  @Delete(':id')
-  remove(@Request() req, @Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.listsService.delete(id, req.user.sub);
+  @Get()
+  findAll(@Request() req) {
+    return this.listsService.findAll(req.user.sub);
   }
 }
