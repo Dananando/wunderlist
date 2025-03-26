@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateTaskDto } from './dtos/create-task.dto';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 import { Task } from './task.entity';
 
 @Injectable()
@@ -10,14 +12,7 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) {}
 
-  async create(
-    listId: number,
-    taskData: {
-      shortDescription: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
-  ): Promise<Task> {
+  async create(listId: number, taskData: CreateTaskDto): Promise<Task> {
     const task = this.tasksRepository.create({
       ...taskData,
       list: { id: listId },
@@ -44,11 +39,7 @@ export class TasksService {
   async update(
     id: number,
     listId: number,
-    taskData: {
-      shortDescription?: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
+    taskData: UpdateTaskDto,
   ): Promise<Task> {
     const task = await this.findOne(id, listId);
     Object.assign(task, taskData);

@@ -10,6 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/common/auth/auth.guard';
+import { CreateTaskDto } from './dtos/create-task.dto';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
@@ -22,12 +24,9 @@ export class TasksController {
   create(
     @Param('listId', ParseIntPipe) listId: number,
     @Body()
-    createTaskDto: {
-      shortDescription: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
+    createTaskDto: CreateTaskDto,
   ): Promise<Task> {
+    console.log('createTaskDto', createTaskDto);
     return this.tasksService.create(listId, createTaskDto);
   }
 
@@ -41,11 +40,7 @@ export class TasksController {
     @Param('listId', ParseIntPipe) listId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body()
-    updateTaskDto: {
-      shortDescription?: string;
-      longDescription?: string;
-      dueDate?: Date;
-    },
+    updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     return this.tasksService.update(id, listId, updateTaskDto);
   }

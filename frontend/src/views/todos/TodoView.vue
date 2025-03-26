@@ -35,7 +35,7 @@
               v-for="task in completedTasks"
               :key="task.id"
               :value="task.id"
-              @click="selectTask(task.id)"
+              @click-on-item="selectTask(task.id)"
               @click-on-icon="tasksStore.toggleTaskCompleted(task.id, selectedListId)"
               icon="mdi-checkbox-marked"
               :model-value="task.completed"
@@ -87,9 +87,11 @@
           v-model="newTask.longDescription"
           label="Long Description"
         />
-        <v-text-field
+        <v-date-picker
+          title="Due Date"
+          color="primary"
           v-model="newTask.dueDate"
-          label="Due Date"
+          landscape
         />
       </v-card-text>
       <v-card-actions>
@@ -155,9 +157,15 @@
 
   function createNewTask() {
     if (selectedListId.value) {
+      console.log(
+        newTask.value,
+        new Date('Thu Mar 06 2025 00:00:00 GMT+0100 (heure normale d’Europe centrale)'),
+      );
       tasksStore.createTask(+selectedListId.value, {
         ...newTask.value,
-        dueDate: newTask.value.dueDate ? new Date(newTask.value.dueDate) : new Date(),
+        dueDate: newTask.value.dueDate
+          ? new Date(newTask.value.dueDate).toISOString()
+          : new Date().toISOString(),
       });
       showNewTaskDialog.value = false;
 

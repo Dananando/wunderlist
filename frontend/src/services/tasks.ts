@@ -4,7 +4,7 @@ export interface Task {
   id: number;
   shortDescription: string;
   longDescription?: string;
-  dueDate?: Date;
+  dueDate?: string;
   listId: number;
   completed: boolean;
 }
